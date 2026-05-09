@@ -1,4 +1,8 @@
 function monthlyPayment(principal, annualRate, termYears) {
+  if (principal <= 0) throw new Error("Principal must be greater than 0");
+  if (annualRate < 0) throw new Error("Interest rate cannot be negative");
+  if (termYears <= 0) throw new Error("Term must be greater than 0");
+
   const monthlyRate = annualRate / 100 / 12;
   const numPayments = termYears * 12;
 
@@ -21,7 +25,15 @@ function amortizationSchedule(principal, annualRate, termYears) {
   const numPayments = termYears * 12;
   for (let month = 1; month <= numPayments; month++) {
     const interestPayment = Math.round(balance * monthlyRate * 100) / 100;
-    const principalPayment = Math.round((payment - interestPayment) * 100) / 100;
+    let principalPayment;
+
+    if (month === numPayments) {
+      // Final payment: clear remaining balance exactly to avoid floating-point drift
+      principalPayment = Math.round(balance * 100) / 100;
+    } else {
+      principalPayment = Math.round((payment - interestPayment) * 100) / 100;
+    }
+
     balance = Math.round((balance - principalPayment) * 100) / 100;
 
     schedule.push({
@@ -46,6 +58,9 @@ function totalCost(principal, annualRate, termYears) {
 }
 
 function affordabilityCheck(annualIncome, monthlyDebts, principal, annualRate, termYears) {
+  if (annualIncome <= 0) throw new Error("Annual income must be greater than 0");
+  if (monthlyDebts < 0) throw new Error("Monthly debts cannot be negative");
+
   const payment = monthlyPayment(principal, annualRate, termYears);
   const monthlyIncome = annualIncome / 12;
   const dti = ((payment + monthlyDebts) / monthlyIncome) * 100;
