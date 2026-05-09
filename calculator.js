@@ -3,12 +3,11 @@ function monthlyPayment(principal, annualRate, termYears) {
   const numPayments = termYears * 12;
 
   if (monthlyRate === 0) {
-    return principal / numPayments;
+    return Math.round((principal / numPayments) * 100) / 100;
   }
 
-  const payment =
-    (principal * (monthlyRate * Math.pow(1 + monthlyRate, numPayments))) /
-    (Math.pow(1 + monthlyRate, numPayments) - 1);
+  const factor = Math.pow(1 + monthlyRate, numPayments);
+  const payment = (principal * (monthlyRate * factor)) / (factor - 1);
 
   return Math.round(payment * 100) / 100;
 }
@@ -19,7 +18,8 @@ function amortizationSchedule(principal, annualRate, termYears) {
   const schedule = [];
   let balance = principal;
 
-  for (let month = 1; month <= termYears * 12; month++) {
+  const numPayments = termYears * 12;
+  for (let month = 1; month <= numPayments; month++) {
     const interestPayment = Math.round(balance * monthlyRate * 100) / 100;
     const principalPayment = Math.round((payment - interestPayment) * 100) / 100;
     balance = Math.round((balance - principalPayment) * 100) / 100;

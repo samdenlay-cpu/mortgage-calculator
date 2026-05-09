@@ -3,7 +3,7 @@ const { monthlyPayment, amortizationSchedule, totalCost, affordabilityCheck } = 
 // monthlyPayment
 console.assert(monthlyPayment(300000, 7, 30) === 1995.91, "Standard 30yr payment");
 console.assert(monthlyPayment(200000, 0, 10) === 1666.67, "Zero interest payment");
-console.assert(monthlyPayment(500000, 5.5, 15) === 4085.72, "15yr payment");
+console.assert(monthlyPayment(500000, 5.5, 15) === 4085.42, "15yr payment");
 
 // totalCost
 const cost = totalCost(300000, 7, 30);
